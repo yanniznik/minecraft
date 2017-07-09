@@ -6,5 +6,97 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
-<script></script>
+
+	<div id="map"></div>	
+
+	<script>
+		var Minecraft = {};
+
+		Minecraft.allBlocks = [];
+		
+
+		Minecraft.start = function() {
+			var test = new Minecraft.map;
+			test.generateBlock();
+		}
+
+		Minecraft.block = function(type, x, y) {
+			this.type = type;
+			this.coordinates = [x, y];
+			var blockHolder = document.createElement("div");
+			blockHolder.classList.add("block");
+			blockHolder.style.backgroundImage = "url('images/" + this.type + ".png')";
+			blockHolder.innerHTML = this.coordinates;
+			document.getElementById("map").appendChild(blockHolder);
+		}
+
+		Minecraft.map = function() {
+			this.height = 20;
+			this.sky = 40;
+			this.x = 1;
+			this.y = 0;
+			this.generateBlock = function() {
+
+				 // GENERATING SKY 
+
+				 for (var s = 0; s < this.sky; s++) {
+				 	this.x += 1;
+				 	if (s % 10 === 0) {
+				 		this.y += 1;
+				 		this.x = 1;
+				 	}
+				 	Minecraft.allBlocks[i] = new Minecraft.block("blank", this.x, this.y);
+				 }
+
+				console.log("sky end at " + this.x + " " + this.y);
+
+				// GENERATING ONE LINE OF GRASS
+
+				this.x = 0;
+				for (var i = 0; i < 10; i++) { // ONE LINE
+					this.x += 1;
+					Minecraft.allBlocks[i] = new Minecraft.block("grass", this.x, this.y);
+				}
+
+				console.log("grass end at " + this.x + " " + this.y);
+
+
+				// GENERATING DIRT
+
+				this.x = 0;
+				for (var i = 0; i < this.height; i++) {
+					this.x += 1;
+					if (i % 10 === 0) { // EVERY 10 BLOCK ADD LINE
+						this.y += 1;
+						this.x = 1;
+					}
+					Minecraft.allBlocks[i] = new Minecraft.block("dirt", this.x, this.y);
+				}
+
+				console.log("dirt end at " + this.x + " " + this.y);
+			}
+		}
+
+		Minecraft.start();
+	</script>
+
+	<style>
+		div.block {
+			width: 100px;
+			height: 100px;
+			display: inline-block;
+			background-size: contain;
+			color: #fff;
+		}
+
+		div#map {
+			width: 1000px;
+			background: #8cbffb;
+		}
+		.block:hover {
+			-webkit-box-shadow: 0px 0px 1px 2px #ffffff;
+			-moz-box-shadow: 0px 0px 1px 2px #ffffff;
+			box-shadow: 0px 0px 1px 2px #ffffff; 
+		}
+	</style>
 </body>
