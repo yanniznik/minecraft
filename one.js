@@ -6,14 +6,19 @@
 		var test = new Minecraft.map;
 		test.generateMap(1000);
 		test.generateBlock();
-		Minecraft.newTree(Math.floor(Math.random() * 6) + 3  
-,ground);
+		Minecraft.elements( Minecraft.random(2,Minecraft.oneLine),ground);
+	}
+
+	Minecraft.random = function(min, max, excluded) {
+		var n = Math.floor(Math.random() * (max-min) + min);
+		if (n >= excluded) n++;
+		return n;
 	}
 
 	Minecraft.block = function(type, x, y) {
 		this.type = type;
 		this.coordinates = [x, y];
-		var $blockHolder = $("<div>", {id : "foo", "class": "block " + this.type, "style": "background-image: url('images/" + this.type + ".png')"}).text(this.coordinates);
+		var $blockHolder = $("<div>", {"class": "block " + this.type, "style": "background-image: url('images/" + this.type + ".png')"});
 		$("#map").append($blockHolder);
 		this.changeType = function(type) {
 			this.type = type;
@@ -24,19 +29,16 @@
 	Minecraft.map = function() {
 		this.x = 1;
 		this.y = 0;
-
 		this.generateMap = function(mapWidth) {
 			var $mapHolder = $("<div>", {id : 'map', 'style': 'width: ' + mapWidth + 'px'})
 			$('body').append($mapHolder);
-			this.oneLine = mapWidth / 100;
+			Minecraft.oneLine = mapWidth / 50;
 		}
-
 		Minecraft.f = -1; 
-
 		this.generateLines = function(block, lines) {
 			for (var i = 0; i < lines; i++) {
 				this.x += 1;
-				if (i % this.oneLine === 0) {
+				if (i % Minecraft.oneLine === 0) {
 					this.y += 1;
 					this.x = 1;
 				}
@@ -47,46 +49,51 @@
 				ground = (this.y-1);
 			}
 		};
-
 		this.generateBlock = function() {
-			this.generateLines("blank", 60);
-			this.generateLines("grass", this.oneLine);
-			this.generateLines("dirt", 20);
+			this.generateLines("blank", 200);
+			this.generateLines("grass", Minecraft.oneLine);
+			this.generateLines("dirt", 80);
 		}
-
 	}
 
-	Minecraft.newTree = function(x, y) {
-		console.log("starting tree");
-
+	Minecraft.elements = function(x, y) {
+		randomNumber = Minecraft.random(0,Minecraft.oneLine,x)
 		for (var i = 0; i < Minecraft.allBlocks.length; i++) {
-			for (var j = 0; j < 2; j++) {
+
+			// GENERATING CLOUD 
+
+			for (var c = 0; c < 3; c++) {
+				for (var o = 0; o < 10 ; o++) {
+					if (Minecraft.allBlocks[i].coordinates.join() == [Minecraft.random(0,Minecraft.oneLine/3)+(randomNumber-5), c+2].join()) {
+						Minecraft.allBlocks[i].changeType("cloud");
+					}
+				}
+			}
+
+			// GENERATING ROCKS
+
+			if (Minecraft.allBlocks[i].coordinates.join() == [randomNumber, y].join()) {
+				Minecraft.allBlocks[i].changeType("rock");
+			}
+			
+			// GENERATING TREE TRUNK
+
+			for (var j = 0; j < 2; j++) { 
 				if (Minecraft.allBlocks[i].coordinates.join() == [x, (y-j)].join()) {
 					Minecraft.allBlocks[i].changeType("tree");
 				}
-		for (var line = 0; line < 3; line++) {
-			for (var p = -1; p < 2; p++) {
-				if (Minecraft.allBlocks[i].coordinates.join() == [(x+p), (y-2)-line].join()) {
-					Minecraft.allBlocks[i].changeType("leaf");	
-				}
-		}
-			
-			}
-			
-			
-			/*if (
-				Minecraft.allBlocks[i].coordinates.join() == [(x - 1), (y-2)].join() ||
-				Minecraft.allBlocks[i].coordinates.join() == [(x + 1 ), (y-2)].join() ||
-				Minecraft.allBlocks[i].coordinates.join() == [(x + 1 ), (y-3)].join() ||
-				Minecraft.allBlocks[i].coordinates.join() == [(x - 1 ), (y-3)].join()
-				) {
-				console.log(Minecraft.allBlocks[i].coordinates.join() == [x, (y-2)].join())
-				console.log("changing " + Minecraft.allBlocks[i].coordinates);
-				Minecraft.allBlocks[i].changeType("leaf");		
-			}*/
-		}
-	}
-}
 
+				// GENERATING TREE LEAVES
+
+				for (var line = 0; line < 3; line++) {
+					for (var p = -1; p < 2; p++) {
+						if (Minecraft.allBlocks[i].coordinates.join() == [(x+p), (y-2)-line].join()) {
+							Minecraft.allBlocks[i].changeType("leaf");	
+						}
+					}
+				}
+			}
+		}
+	} // end elements
 
 	Minecraft.start();
