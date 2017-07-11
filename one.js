@@ -7,6 +7,7 @@
 		test.generateMap(1000);
 		test.generateBlock();
 		Minecraft.elements( Minecraft.random(2,Minecraft.oneLine),ground);
+		Minecraft.initializeTools(Minecraft.toolName, Minecraft.blocks);
 	}
 
 	Minecraft.random = function(min, max, excluded) {
@@ -96,4 +97,50 @@
 		}
 	} // end elements
 
-	Minecraft.start();
+	Minecraft.tools = function (type, approachedBlock){
+
+		this.toolHolder;
+		this.type = type;
+		this.approachedBlock = approachedBlock;
+		this.selected = false;
+
+		this.create = function() {
+
+			var self = this;
+			this.toolHolder = document.createElement("div");
+			this.toolHolder.classList.add("tool");
+			this.toolHolder.style.backgroundImage =  "url('./images/" + this.type + ".png')";
+			$(".tools-container").append(this.toolHolder);
+
+			this.toolHolder.addEventListener('click', function () {
+				Minecraft.selectTool(self);
+			})
+
+		}
+}
+
+Minecraft.allTools = [];
+Minecraft.allBlocks = [];
+Minecraft.selectedTool;
+Minecraft.selectedBlock;
+Minecraft.toolName = ["pickaxe","shovel","axe"];
+Minecraft.blocks = ["rock", "dirt", "wood", "sky", "cloud", "leaves"];
+
+Minecraft.initializeTools = function (tools, blocks) {
+
+	for(var i = 0; i < tools.length; i++){
+		Minecraft.allTools[i] = new Minecraft.tools(tools[i], blocks[i]);
+		console.log(tools, blocks);
+		Minecraft.allTools[i].create();
+	}
+}
+
+Minecraft.selectTool = function (self){
+//better approach then setting every object type false
+Minecraft.selectedTool = self;
+
+console.log(Minecraft.selectedTool);
+}
+
+
+Minecraft.start();
