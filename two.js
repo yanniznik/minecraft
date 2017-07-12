@@ -5,7 +5,7 @@ Minecraft = {};
 /* var block1 = new Minecraft.block("wood");
 alert(block1.type);*/
 
-Minecraft.block = function (type){
+/*Minecraft.block = function (type){
 
     this.domBlock; //refers to dom element
     this.type = type;
@@ -14,22 +14,21 @@ Minecraft.block = function (type){
     this.position = [];
     this.width = 50;
     this.height = 50;
-  }
+  }*/
 
 //Create a block based on type or id (needs to be positioned after click)
 Minecraft.block.prototype.create = function (){
  
  var self = this;
- this.domBlock = document.createElement("div");
+ this.blockHolder = document.createElement("div");
    //Each DOM block element will have class block 
-   this.domBlock.classList.add("block", "dirt");
+   this.blockHolder.addClass("block", "dirt");
    //not all background images have a png extension, use if/else based on type
-   this.domBlock.style.backgroundImage =  "url('./images/" + this.type + ".png')"
-   document.getElementById("placeholder").appendChild(this.domBlock);
+   this.blockHolder.css("background", "'./images/" + this.type + ".png' ");
 
    console.log(self);
 
-   this.domBlock.addEventListener('click', function () {
+   this.blockHolder.click(function () {
      console.log(self);
      if(Minecraft.selectedTool != null){
       Minecraft.block.prototype.tryToRemove(self);
@@ -42,12 +41,12 @@ Minecraft.block.prototype.create = function (){
     //if the block objects DOM element contains a class that matches the Selecetedtools
     //approachedblock, then the tool and the block match, and we can remove the block
 
-    if(block.domBlock.classList.contains(Minecraft.selectedTool.approachedBlock)){
+    if(block.blockHolder.hasClass(Minecraft.selectedTool.approachedBlock)){
     //types need to match classes, whatever object we create in the constructor
     //their classes should be set to type
-    block.domBlock.classList.remove(block.type);
-    block.domBlock.classList.add("sky");
-    console.log(block.domBlock.classList);
+    block.blockHolder.removeClass(block.type);
+    block.blockHolder.addClass("sky");
+    console.log(block.blockHolder.classList);
     
   }
 
@@ -105,7 +104,9 @@ Minecraft.tools = function (type, approachedBlock){
 
   Minecraft.initializeBlocks = function(blocks) {
    for(var i = 0; i < blocks.length; i++){
-    Minecraft.allBlocks[i] = new Minecraft.block(blocks[i]);
+
+     //how to get X,Y coordinates from map
+    Minecraft.allBlocks[i] = new Minecraft.block(blocks[i], x , y);
     Minecraft.allBlocks[i].create();
   }
 
@@ -124,7 +125,7 @@ console.log(Minecraft.selectedTool);
 
 Minecraft.start = function (){
 
-  Minecraft.initializeTools(Minecraft.toolName, Minecraft.blocks);
+Minecraft.initializeTools(Minecraft.toolName, Minecraft.blocks);
 //this.initializeBlocks
 Minecraft.initializeBlocks(Minecraft.blocks);
 

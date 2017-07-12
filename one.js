@@ -17,15 +17,57 @@
 	}
 
 	Minecraft.block = function(type, x, y) {
+
 		this.type = type;
 		this.coordinates = [x, y];
-		var $blockHolder = $("<div>", {"class": "block " + this.type, "style": "background-image: url('images/" + this.type + ".png')"});
-		$("#map").append($blockHolder);
+		this.blockHolder = $("<div>", {"class": "block " + this.type, "style": "background-image: url('images/" + this.type + ".png')"});
+		$("#map").append(this.blockHolder);
 		this.changeType = function(type) {
 			this.type = type;
-			$blockHolder.css("background-image","url('images/" + this.type + ".png')");
+			this.blockHolder.css("background-image","url('images/" + this.type + ".png')");
 		}
 	}
+
+	Minecraft.block.prototype.create = function (){
+ 
+ var self = this;
+ /*this.domBlock = document.createElement("div");
+   //Each DOM block element will have class block 
+   this.domBlock.classList.add("block", "dirt");
+   //not all background images have a png extension, use if/else based on type
+   this.domBlock.style.backgroundImage =  "url('./images/" + this.type + ".png')"*/
+   //document.getElementById("placeholder").appendChild(this.$blockHolder);
+
+   console.log(self);
+
+   this.blockHolder.click(function () {
+	   console.log('block clicked');
+     console.log(self);
+     if(Minecraft.selectedTool != null){
+      Minecraft.block.prototype.tryToRemove(self);
+    }
+  })
+ }
+
+ Minecraft.block.prototype.tryToRemove = function (block){
+  console.log('in delete function');
+  console.log(block.blockHolder)
+    //if the block objects DOM element contains a class that matches the Selecetedtools
+    //approachedblock, then the tool and the block match, and we can remove the block
+
+    if(block.blockHolder.hasClass(Minecraft.selectedTool.approachedBlock)){
+    //types need to match classes, whatever object we create in the constructor
+    //their classes should be set to type
+	console.log('Y')
+    block.blockHolder.removeClass(block.type);
+    block.blockHolder.addClass("sky");
+    //console.log(block.domBlock.classList);
+    
+  }
+
+}
+
+ 
 
 	Minecraft.map = function() {
 		this.x = 1;
@@ -44,6 +86,9 @@
 					this.x = 1;
 				}
 				Minecraft.allBlocks[(Minecraft.f+1)] = new Minecraft.block(block, this.x, this.y);
+				console.log(Minecraft.allBlocks[(Minecraft.f+1)]);
+				Minecraft.allBlocks[(Minecraft.f+1)].create(); 
+
 				Minecraft.f++;
 			}
 			if (block == "grass") {
