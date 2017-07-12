@@ -33,3 +33,7 @@
 			margin: 0 auto;
 			margin-top: 50px;
 		}
+
+		.tool.active {
+			border: 5px solid blue;
+		}
