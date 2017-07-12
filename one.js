@@ -7,7 +7,7 @@
 		test.generateMap(1000);
 		test.generateBlock();
 		Minecraft.elements( Minecraft.random(2,Minecraft.oneLine),ground);
-		Minecraft.initializeTools(Minecraft.toolName, Minecraft.blocks);
+		Minecraft.initializeTools();
 	}
 
 	Minecraft.random = function(min, max, excluded) {
@@ -16,15 +16,47 @@
 		return n;
 	}
 
+	Minecraft.selectedTool = [];
+
+	Minecraft.tools = function (type, approachedBlock){
+		this.type = type;
+		this.approachedBlock = approachedBlock;
+		var self = this;
+		this.toolHolder = $("<div>", {"class": "tool " + this.type, "style": "background-image: url('images/" + this.type + ".png')"});
+		$(".tools-container").append(this.toolHolder);
+		this.toolHolder.click(function(){
+			Minecraft.selectedTool = [];
+			Minecraft.selectedTool = [self.type, self.approachedBlock];
+			 $(".tool").removeClass('active');
+  $(this).addClass('active');
+		})
+	}
+
+	Minecraft.initializeTools = function () {
+		new Minecraft.tools("axe", ["tree", "leaf"]);
+		new Minecraft.tools("shovel", ["dirt", "grass"]);
+		new Minecraft.tools("pickaxe", ["rock"]);
+		new Minecraft.tools("eraser", ["tree", "leaf", "dirt", "grass", "rock", "cloud"]);
+	}
+
 	Minecraft.block = function(type, x, y) {
 		this.type = type;
 		this.coordinates = [x, y];
-		var $blockHolder = $("<div>", {"class": "block " + this.type, "style": "background-image: url('images/" + this.type + ".png')"});
-		$("#map").append($blockHolder);
+		var self = this;
+		this.blockHolder = $("<div>", {"class": "block " + this.type, "style": "background-image: url('images/" + this.type + ".png')"});
+		$("#map").append(this.blockHolder);
 		this.changeType = function(type) {
 			this.type = type;
-			$blockHolder.css("background-image","url('images/" + this.type + ".png')");
+			this.blockHolder.css("background-image","url('images/" + this.type + ".png')");
 		}
+		this.blockHolder.click(function() {
+			for (var i = 0; i < Minecraft.selectedTool[1].length; i++) {
+				targetBlock = Minecraft.selectedTool[1][i];
+				if (targetBlock == self.type) {
+					self.changeType("blank");
+				}
+			}
+		})
 	}
 
 	Minecraft.map = function() {
@@ -97,50 +129,7 @@
 		}
 	} // end elements
 
-	Minecraft.tools = function (type, approachedBlock){
-
-		this.toolHolder;
-		this.type = type;
-		this.approachedBlock = approachedBlock;
-		this.selected = false;
-
-		this.create = function() {
-
-			var self = this;
-			this.toolHolder = document.createElement("div");
-			this.toolHolder.classList.add("tool");
-			this.toolHolder.style.backgroundImage =  "url('./images/" + this.type + ".png')";
-			$(".tools-container").append(this.toolHolder);
-
-			this.toolHolder.addEventListener('click', function () {
-				Minecraft.selectTool(self);
-			})
-
-		}
-}
-
-Minecraft.allTools = [];
-Minecraft.allBlocks = [];
-Minecraft.selectedTool;
-Minecraft.selectedBlock;
-Minecraft.toolName = ["pickaxe","shovel","axe"];
-Minecraft.blocks = ["rock", "dirt", "wood", "sky", "cloud", "leaves"];
-
-Minecraft.initializeTools = function (tools, blocks) {
-
-	for(var i = 0; i < tools.length; i++){
-		Minecraft.allTools[i] = new Minecraft.tools(tools[i], blocks[i]);
-		console.log(tools, blocks);
-		Minecraft.allTools[i].create();
-	}
-}
-
-Minecraft.selectTool = function (self){
-//better approach then setting every object type false
-Minecraft.selectedTool = self;
-
-console.log(Minecraft.selectedTool);
-}
 
 
-Minecraft.start();
+
+	Minecraft.start();

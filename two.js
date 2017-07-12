@@ -1,20 +1,4 @@
-Minecraft = {};
 
-
-//Block elements - defining properties - type,
-/* var block1 = new Minecraft.block("wood");
-alert(block1.type);*/
-
-Minecraft.block = function (type){
-
-    this.domBlock; //refers to dom element
-    this.type = type;
-    this.selected = false;
-    this.onGround = false;
-    this.position = [];
-    this.width = 50;
-    this.height = 50;
-  }
 
 //Create a block based on type or id (needs to be positioned after click)
 Minecraft.block.prototype.create = function (){
