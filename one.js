@@ -26,7 +26,8 @@
 		$(".tools-container").append(this.toolHolder);
 		this.toolHolder.click(function(){
 			Minecraft.selectedTool = [];
-			Minecraft.selectedTool = [self.type, self.approachedBlock];
+			Minecraft.selectedTool = self.approachedBlock;
+			console.log(Minecraft.selectedTool)
 			 $(".tool").removeClass('active');
   $(this).addClass('active');
 		})
@@ -50,8 +51,8 @@
 			this.blockHolder.css("background-image","url('images/" + this.type + ".png')");
 		}
 		this.blockHolder.click(function() {
-			for (var i = 0; i < Minecraft.selectedTool[1].length; i++) {
-				targetBlock = Minecraft.selectedTool[1][i];
+			for (var i = 0; i < Minecraft.selectedTool.length; i++) {
+				targetBlock = Minecraft.selectedTool[i];
 				if (targetBlock == self.type) {
 					self.changeType("blank");
 				}
