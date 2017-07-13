@@ -17,14 +17,7 @@
 			$("#map").remove();
 			Minecraft.allBlocks = [];
 			Minecraft.selectedTool = [];
-			inventoryCounter = {
-				cloud : 0,
-				rock : 0,
-				dirt : 0,
-				leaf : 0,
-				tree : 0,
-				grass : 0
-			}
+			inventoryCounter = {};
 			Minecraft.start();
 		})
 	}
@@ -49,6 +42,7 @@
 			Minecraft.selectedTool = self.approachedBlock;
 			$("div").removeClass('active');
 			$(this).addClass('active');
+			$("#map").css( 'cursor', 'url(images/cursors/' + self.type + '.png), auto' );
 		})
 	}
 
@@ -56,7 +50,7 @@
 		new Minecraft.tools("axe", ["tree", "leaf"]);
 		new Minecraft.tools("shovel", ["dirt", "grass"]);
 		new Minecraft.tools("pickaxe", ["rock"]);
-		new Minecraft.tools("eraser", ["tree", "leaf", "dirt", "grass", "rock", "cloud"]);
+		new Minecraft.tools("eraser", ["tree", "leaf", "dirt", "grass", "rock", "cloud", "lava"]);
 	}
 
 	Minecraft.block = function(type, x, y) {
@@ -76,9 +70,14 @@
 			for (var i = 0; i < Minecraft.selectedTool.length; i++) {
 				targetBlock = Minecraft.selectedTool[i];
 				if (targetBlock == self.type) {
+					if (testArray = self.type in inventoryCounter) {
+					}
+					else
+					{
+						inventoryCounter[self.type] = 0;
+					}
 					self.changeType("blank");
 					new Minecraft.inventory(targetBlock);
-					
 				}
 				
 			}
@@ -89,6 +88,7 @@
 					inventoryCounter[Minecraft.selectedInventory.type]--;
 					$("." + self.type + " span").text(inventoryCounter[Minecraft.selectedInventory.type]);
 					if(inventoryCounter[Minecraft.selectedInventory.type] == 0){
+						$("#map").css( 'cursor', 'auto' );
 
 
 						$(".inventory-container ." + self.type ).hide();
@@ -117,18 +117,12 @@
 		$inv.click(function (){
 			$(".tool").removeClass("active");
 			$(this).addClass("active");
+			$("#map").css( 'cursor', 'url(images/cursors/' + self.type + '.png), auto' );
 			Minecraft.selectedInventory = self;
 		})
 
 	}
-	var inventoryCounter = {
-		cloud : 0,
-		rock : 0,
-		dirt : 0,
-		leaf : 0,
-		tree : 0,
-		grass : 0
-	}
+	var inventoryCounter = {};
 	
 	Minecraft.map = function() {
 		this.x = 1;
@@ -167,6 +161,7 @@
 			this.generateLines("blank", 200);
 			this.generateLines("blank", Minecraft.oneLine);
 			this.generateLines("dirt", 60);
+			this.generateLines("lava", Minecraft.oneLine);
 		}
 	}
 
