@@ -37,7 +37,7 @@
 		this.toolHolder = $("<div>", {"class": "tool " + this.type}).append("<img src='images/" + this.type + ".png'>");
 		$(".tools-container").append(this.toolHolder);
 		this.toolHolder.click(function(){
-			Minecraft.selectedInventory = {};
+			Minecraft.selectedInventory = null;
 			Minecraft.selectedTool = [];
 			Minecraft.selectedTool = self.approachedBlock;
 			$("div").removeClass('active');
@@ -81,19 +81,15 @@
 				}
 				
 			}
-			if(Minecraft.selectedInventory != null && inventoryCounter[Minecraft.selectedInventory.type] != 0){
+			if(Minecraft.selectedInventory != null && inventoryCounter[Minecraft.selectedInventory] != 0){
 				if(self.type == "blank"){
-					self.changeType(Minecraft.selectedInventory.type);
-
-					inventoryCounter[Minecraft.selectedInventory.type]--;
-					$("." + self.type + " span").text(inventoryCounter[Minecraft.selectedInventory.type]);
-					if(inventoryCounter[Minecraft.selectedInventory.type] == 0){
+					self.changeType(Minecraft.selectedInventory);
+					inventoryCounter[Minecraft.selectedInventory]--;
+					$("." + self.type + " span").text(inventoryCounter[Minecraft.selectedInventory]);
+					if(inventoryCounter[Minecraft.selectedInventory] == 0){
+						Minecraft.selectedInventory = null;
 						$("#map").css( 'cursor', 'auto' );
-
-
-						$(".inventory-container ." + self.type ).hide();
-						
-						
+						$(".inventory-container ." + self.type ).remove();
 					}
 				}
 			}
@@ -115,10 +111,11 @@
 			$("." + this.type + " span").text(inventoryCounter[type]);
 		}
 		$inv.click(function (){
+			Minecraft.selectedTool = [];
 			$(".tool").removeClass("active");
 			$(this).addClass("active");
 			$("#map").css( 'cursor', 'url(images/cursors/' + self.type + '.png), auto' );
-			Minecraft.selectedInventory = self;
+			Minecraft.selectedInventory = self.type;
 		})
 
 	}
@@ -167,12 +164,11 @@
 
 	Minecraft.RandomArray= new Array(20);
 
-	for(i=0;i<20;i++){
-		Minecraft.RandomArray[i]=Math.floor(Math.random()*3+1);
-	}
-
 
 	Minecraft.elements = function(x, y) {
+		for(i=0;i<20;i++){
+		Minecraft.RandomArray[i]=Math.floor(Math.random()*3+1);
+	}
 		randomNumber = Minecraft.random(0,Minecraft.oneLine,x)
 		randomNumber2 = Minecraft.random(0,Minecraft.oneLine,x)
 		for (var i = 0; i < Minecraft.allBlocks.length; i++) {
