@@ -4,7 +4,7 @@
 
 	Minecraft.start = function() {
 		var letsPlay = new Minecraft.map;
-		letsPlay.generateMap(1000);
+		letsPlay.generateMap(3000);
 		letsPlay.generateBlock();
 		Minecraft.elements( Minecraft.random(2,Minecraft.oneLine),ground);
 		Minecraft.initializeTools();
@@ -124,7 +124,9 @@
 	Minecraft.map = function() {
 		this.x = 1;
 		this.y = 0;
+
 		this.generateMap = function(mapWidth) {
+			Minecraft.mapWidth = mapWidth;
 			var $mapHolder = $("<div>", {id : 'map', 'style': 'width: ' + mapWidth + 'px'})
 			var $toolContainer = $("<div>", {'class' : 'tools-container bgholder'})
 			var $inventoryContainer = $("<div>", {'class' : 'inventory-container bgholder'})
@@ -155,20 +157,20 @@
 			}
 		};
 		this.generateBlock = function() {
-			this.generateLines("blank", 200);
+			this.generateLines("blank", Minecraft.mapWidth/5);
 			this.generateLines("blank", Minecraft.oneLine);
-			this.generateLines("dirt", 60);
+			this.generateLines("dirt", Minecraft.mapWidth/10);
 			this.generateLines("lava", Minecraft.oneLine);
 		}
 	}
 
-	Minecraft.RandomArray= new Array(20);
+	Minecraft.RandomArray= new Array(Minecraft.oneLine);
 
 
 	Minecraft.elements = function(x, y) {
-		for(i=0;i<20;i++){
-		Minecraft.RandomArray[i]=Math.floor(Math.random()*3+1);
-	}
+		for(i=0;i<Minecraft.oneLine;i++){
+			Minecraft.RandomArray[i]=Math.floor(Math.random()*3+1);
+		}
 		randomNumber = Minecraft.random(0,Minecraft.oneLine,x)
 		randomNumber2 = Minecraft.random(0,Minecraft.oneLine,x)
 		for (var i = 0; i < Minecraft.allBlocks.length; i++) {
@@ -205,14 +207,15 @@
 
 
 			// GENERATING ROCKS
-
-			if (Minecraft.allBlocks[i].coordinates.join() == [randomNumber, y].join()) {
-				Minecraft.allBlocks[i].changeType("rock");
-				Minecraft.allBlocks[i+Minecraft.oneLine].changeType("grass");
-				Minecraft.allBlocks[i+(Minecraft.oneLine*2)].changeType("dirt");
+			for (var z = 1; z < 5; z++) { 
+				if (Minecraft.allBlocks[i].coordinates.join() == [randomNumber+(Minecraft.random(2,Minecraft.oneLine)), y].join()) {
+					Minecraft.allBlocks[i].changeType("rock");
+					Minecraft.allBlocks[i+Minecraft.oneLine].changeType("grass");
+					Minecraft.allBlocks[i+(Minecraft.oneLine*2)].changeType("dirt");
+				}
 			}
 
-			
+
 			// GENERATING TREE TRUNK
 
 			for (var j = 0; j < 2; j++) { 
