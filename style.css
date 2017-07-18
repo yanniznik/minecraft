@@ -87,7 +87,7 @@
 		    width: 60px;
 		    height: 60px;
 		    background-size: contain;
-		    background-image: url('images/slot.png');
+		    background-image: url('https://itc.yananas.com/git/minecraft/images/slot.png');
 		    background-size: contain;
 		}
 		.bgholder > .active {

@@ -48,7 +48,7 @@
 	    var self = this;
 	    this.toolHolder = $("<div>", {
 	        "class": "tool " + this.type
-	    }).append("<img src='images/" + this.type + ".png'>");
+	    }).append("<img src='https://itc.yananas.com/git/minecraft/images/" + this.type + ".png'>");
 	    $(".tools-container").append(this.toolHolder);
 	    this.toolHolder.click(function() {
 	        Minecraft.selectedInventory = null;
@@ -56,7 +56,7 @@
 	        Minecraft.selectedTool = self.approachedBlock;
 	        $("div").removeClass('active');
 	        $(this).addClass('active');
-	        $("#map").css('cursor', 'url(images/cursors/' + self.type + '.png), auto');
+	        $("#map").css('cursor', 'url(https://itc.yananas.com/git/minecraft/images/cursors/' + self.type + '.png), auto');
 	    })
 	}
 
@@ -77,12 +77,12 @@
 	    var self = this;
 	    this.blockHolder = $("<div>", {
 	        "class": "block " + this.type,
-	        "style": "background-image: url('images/" + this.type + ".png')"
+	        "style": "background-image: url('https://itc.yananas.com/git/minecraft/images/" + this.type + ".png')"
 	    });
 	    $("#map").append(this.blockHolder);
 	    this.changeType = function(type) { // changing block type function
 	        this.type = type;
-	        this.blockHolder.css("background-image", "url('images/" + this.type + ".png')");
+	        this.blockHolder.css("background-image", "url('https://itc.yananas.com/git/minecraft/images/" + this.type + ".png')");
 	        this.blockHolder.removeClass().addClass("block " + this.type);
 	    }
 
@@ -126,7 +126,7 @@
 	    this.type = type;
 	    var $inv = $("<div>", {
 	        'class': 'inv ' + this.type
-	    }).append("<img src='images/" + this.type + ".png'>")
+	    }).append("<img src='https://itc.yananas.com/git/minecraft/images/" + this.type + ".png'>")
 	    var $counting = $("<span>")
 	    $($inv).append($counting);
 	    inventoryCounter[targetBlock]++;
@@ -139,7 +139,7 @@
 	        Minecraft.selectedTool = [];
 	        $(".tool").removeClass("active");
 	        $(this).addClass("active");
-	        $("#map").css('cursor', 'url(images/cursors/' + self.type + '.png), auto');
+	        $("#map").css('cursor', 'url(https://itc.yananas.com/git/minecraft/images/cursors/' + self.type + '.png), auto');
 	        Minecraft.selectedInventory = self.type;
 	    })
 
@@ -172,7 +172,7 @@
 	        })
 	        var $resetButton = $("<div>", {
 	            'class': 'reset'
-	        }).append("<img src='images/reset.png'>");
+	        }).append("<img src='https://itc.yananas.com/git/minecraft/images/reset.png'>");
 
 	        $('body').append($mapHolder);
 	        $($mapHolder).append($toolContainer);
